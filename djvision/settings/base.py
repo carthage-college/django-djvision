@@ -13,6 +13,17 @@ from djzbar.settings import INFORMIX_ODBC
 # Debug
 DEBUG = False
 INFORMIX_DEBUG = 'debug'
+
+# informix environment for shell scripts that run under cron
+INFORMIXSERVER = ''
+DBSERVERNAME = ''
+INFORMIXDIR = ''
+ODBCINI = ''
+ONCONFIG = ''
+INFORMIXSQLHOSTS = ''
+LD_LIBRARY_PATH = ''
+LD_RUN_PATH = ''
+
 ADMINS = (
     ('', ''),
 )
@@ -190,6 +201,9 @@ EMAIL_FAIL_SILENTLY = False
 DEFAULT_FROM_EMAIL = ''
 SERVER_EMAIL = ''
 SERVER_MAIL=''
+# Provisioning data directory
+PROVISIONING_DATA_DIRECTORY = ''
+PROVISIONING_DATA_DIRECTORY_TEST = ''
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/')
 LOG_FILENAME = LOG_FILEPATH + 'debug.log'
