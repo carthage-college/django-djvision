@@ -150,7 +150,7 @@ def main():
     main function
     """
 
-    key = 'debug'
+    key = settings.INFORMIX_DEBUG
 
     if filetype not in ['csv','xlsx']:
         print("filetype must be: 'csv' or 'xlsx'\n")
