@@ -81,7 +81,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'djvision.core',
-    'djvisions.dashboard',
+    'djvision.dashboard',
     # needed for template tags
     'djtools',
 ]
