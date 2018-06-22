@@ -1,0 +1,196 @@
+table cc_provisioning_detail_rec
+    desc            "detailed record of each provisioning action with a field for each element in .csv file"
+    location        "DBS_COMMON"
+    lockmode        row
+    prefix          ""        { Used by makedef }
+    rowlimits       ??:??
+    status          "Active"
+    text            "detailed record for each provisioning item"
+    track           "Common"
+
+column detail_no    serial not null
+                    primary key constraint detailno_pk1
+    comments        ""
+    desc            "System generated sequential number uniquely identifying this record"
+    heading         "Provisioning detail ID"
+    text            "Provisioning detail ID"
+    attributes
+        (
+        )
+
+column batch        integer default 0 not null
+    comments        "Batch process of which this record is a part"
+    desc            "Batch"
+    heading         "Batch"
+    text            "Batch"
+    attributes
+        (
+        )
+
+column created_at   datetime year to second default current year to second not null
+    comments        ""
+    desc            "The datetime when the record was created"
+    heading         "Created at"
+    text            "Created at"
+    attributes
+        (
+        )
+
+column username     varchar(32)
+    comments        "loginID or 'username' in the parlance of our times"
+    desc            "Username"
+    heading         "Username"
+    text            "Username"
+    attributes
+        (
+        )
+
+column last_name    varchar(32)
+    comments        "Last name"
+    desc            "Last name"
+    heading         "Last name"
+    text            "Last name"
+    attributes
+        (
+        )
+
+column first_name    varchar(32)
+    comments        "First name"
+    desc            "First name"
+    heading         "First name"
+    text            "First name"
+    attributes
+        (
+        )
+
+column id   integer default 0 not null
+    comments        "College ID"
+    desc            "College ID"
+    heading         "College ID"
+    text            "College ID"
+    attributes
+        (
+        )
+
+column faculty      char(1)
+    comments        "Faculty group in active directory/ldap"
+    desc            "Faculty group"
+    heading         "Faculty group"
+    text            "Faculty group"
+    attributes
+        (
+        )
+
+column staff        char(1)
+    comments        "Staff group in active directory/ldap"
+    desc            "Staff group"
+    heading         "Staff group"
+    text            "Staff group"
+    attributes
+        (
+        )
+
+column student        char(1)
+    comments        "Staff group in active directory/ldap"
+    desc            "Staff group"
+    heading         "Staff group"
+    text            "Staff group"
+    attributes
+        (
+        )
+
+column retire       char(1)
+    comments        "Retire group in active directory/ldap"
+    desc            "Retire group"
+    heading         "Retire group"
+    text            "Retire group"
+    attributes
+        (
+        )
+
+column birth_date   date
+    comments        ""
+    desc            "Birthdate of this person."
+    heading         "Birthdate"
+    text            "Birthdate"
+    attributes
+        (
+        )
+
+column postal_code  char(10)
+    comments        ""
+    desc            "Postal code for this address."
+    heading         "Postal code"
+    text            "Postal code"
+    attributes
+        (
+        )
+
+column account      char(10)
+    comments        "acct_type"
+    desc            "Account type"
+    heading         "Account type"
+    text            "Account type"
+    attributes
+        (
+        )
+
+column proxid       integer
+    comments        "proxID"
+    desc            "ProxID"
+    heading         "ProxID"
+    text            "ProxID"
+    attributes
+        (
+        )
+
+column phone_ext    varchar(4)
+    comments        "Phone extension"
+    desc            "Phone extension"
+    heading         "Phone extension"
+    text            "Phone extension"
+    attributes
+        (
+        )
+
+column departments  varchar(255)
+    comments        "depts"
+    desc            "Departments, pipe delimited list"
+    heading         "Departments"
+    text            "Departments"
+    attributes
+        (
+        )
+
+column csv          lvarchar(2048)
+    comments        "CSV line"
+    desc            "CSV"
+    heading         "CSV"
+    text            "CSV"
+    attributes
+        (
+        )
+
+column comments     lvarchar(4092)
+    comments        "Comments"
+    desc            "Comments and/or error message"
+    heading         "Comments"
+    text            "Comments"
+    attributes
+        (
+        )
+
+constraints
+    foreign key (id) references id_rec(id) on delete no action constraint cc_provisioning_detail_rec_fk_id
+    foreign key (batch) references cc_provisioning_batch_rec(batch_no) on delete no action constraint cc_provisioning_detail_rec_fk_batch
+
+
+index               { Index names must be unique across database }
+                    cc_provisioning_detail_rec_id on (id)
+
+grant
+    select  to (group carsprog, group registrar, group student)
+    update  to (group carsprog, group registrar, group student)
+    insert  to (group carsprog, group registrar, group student)
+    delete  to (group carsprog)
+    control to (group carsprog)

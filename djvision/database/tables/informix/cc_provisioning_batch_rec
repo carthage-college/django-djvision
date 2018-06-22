@@ -1,0 +1,62 @@
+table cc_provisioning_batch_rec
+    desc            "logging with timestamp of when the provisioning process executed"
+    location        "DBS_COMMON"
+    lockmode        row
+    prefix          ""        { Used by makedef }
+    rowlimits       ??:??
+    status          "Active"
+    text            "logging for provisioning process"
+    track           "Common"
+
+column batch_no     serial not null
+                    primary key constraint batchno_pk1
+    comments        ""
+    desc            "System generated sequential number uniquely identifying this record"
+    heading         "Provisioning Log Entry ID"
+    text            "Provisioning Log Entry ID"
+    attributes
+        (
+        )
+
+column created_at   datetime year to second default current year to second not null
+    comments        ""
+    desc            "The datetime when the provisioning event took place"
+    heading         "Created at"
+    text            "Created at"
+    attributes
+        (
+        )
+
+column sitrep       smallint
+    comments       "Boolean that indicates whether or not the batch process succeeded."
+    desc           "Status of the process"
+    heading        "Status of the process"
+    text           "Status of the process"
+    attributes
+        (
+        )
+
+column count        integer
+    comments        "Count: number of items in the batch process"
+    desc            "Count"
+    heading         "Count"
+    text            "Count"
+    attributes
+        (
+        )
+
+column comments     lvarchar(4092)
+    comments        "Comments"
+    desc            "Comments and/or error message"
+    heading         "Comments"
+    text            "Comments"
+    attributes
+        (
+        )
+
+grant
+    select  to (group carsprog, group registrar, group student)
+    update  to (group carsprog, group registrar, group student)
+    insert  to (group carsprog, group registrar, group student)
+    delete  to (group carsprog)
+    control to (group carsprog)
