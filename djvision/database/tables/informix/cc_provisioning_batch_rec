@@ -1,3 +1,10 @@
+{
+ Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
+ -------------------------------------------------------------------------
+ $Header: cc_provisioning_batch_rec,v 8.0.17100.2 2018/06/26 11:48:17 stevek Released $
+ -------------------------------------------------------------------------
+}
+
 table cc_provisioning_batch_rec
     desc            "logging with timestamp of when the provisioning process executed"
     location        "DBS_COMMON"
@@ -36,20 +43,20 @@ column sitrep       smallint
         (
         )
 
-column count        integer
-    comments        "Count: number of items in the batch process"
-    desc            "Count"
-    heading         "Count"
-    text            "Count"
+column total        integer
+    comments        "Total number of items in the batch process"
+    desc            "Total"
+    heading         "Total"
+    text            "Total"
     attributes
         (
         )
 
-column comments     lvarchar(4092)
-    comments        "Comments"
-    desc            "Comments and/or error message"
-    heading         "Comments"
-    text            "Comments"
+column notes        lvarchar(4092)
+    comments        "Notes, comments, and/or error message"
+    desc            "Notes, comments, and/or error message"
+    heading         "Notes"
+    text            "Notes"
     attributes
         (
         )
