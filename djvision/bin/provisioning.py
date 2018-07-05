@@ -226,7 +226,8 @@ def main():
                 csv = '|'.join(
                     ['{}'.format(value) for (key, value) in p.items()]
                 )
-                debug_logger.debug("csv = {}".format(csv))
+                if test:
+                    debug_logger.debug("csv = {}".format(csv))
 
                 try:
                     sql = INSERT_EMAIL_RECORD(cid=p.id, ldap=p.loginid)
