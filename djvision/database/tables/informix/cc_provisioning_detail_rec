@@ -1,7 +1,7 @@
 {
  Revision Information (Automatically maintained by 'make' - DON'T CHANGE)
  -------------------------------------------------------------------------
- $Header: cc_provisioning_detail_rec,v 8.0 2018/06/26 11:55:02 stevek Released $
+ $Header: cc_provisioning_detail_rec,v 8.0.17100.1 2018/07/05 14:50:38 stevek Released $
  -------------------------------------------------------------------------
 }
 
@@ -188,8 +188,13 @@ column notes     lvarchar(4092)
         )
 
 constraints
-    foreign key (id) references id_rec(id) constraint cc_provisioning_detail_rec_fk_id
     foreign key (batch) references cc_provisioning_batch_rec(batch_no) constraint cc_provisioning_detail_rec_fk_batch
+
+index                           { Index names must be unique across database }
+    cc_provisioning_detail_rec_id on (id)
+    cc_provisioning_detail_rec_username on (username)
+    cc_provisioning_detail_rec_last_name on (last_name)
+    cc_provisioning_detail_rec_proxid on (proxid)
 
 grant
     select  to (group carsprog, group registrar, group student)
