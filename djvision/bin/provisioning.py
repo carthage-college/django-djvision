@@ -26,11 +26,14 @@ os.environ['INFORMIXSQLHOSTS'] = settings.INFORMIXSQLHOSTS
 os.environ['LD_LIBRARY_PATH'] = settings.LD_LIBRARY_PATH
 os.environ['LD_RUN_PATH'] = settings.LD_RUN_PATH
 
-from djvision.core.sql import INSERT_EMAIL_RECORD
-from djvision.core.sql import INSERT_CVID_RECORD
+from djvision.core.sql import (
+    INSERT_CVID_RECORD, INSERT_DETAIL_RECORD, INSERT_EMAIL_RECORD
+)
 from djvision.core.sql import SELECT_NEW_PEOPLE
+from djvision.core.data import ProvisioningBatchRec
 
 from djzbar.utils.informix import do_sql
+from djzbar.utils.informix import get_session
 from djzbar.settings import INFORMIX_EARL_TEST
 from djzbar.settings import INFORMIX_EARL_PROD
 
@@ -75,18 +78,12 @@ parser.add_argument(
 
 TIMESTAMP = time.strftime("%Y%m%d%H%M%S")
 
-# create logger for collecting failed inserts
-logger = logging.getLogger(__name__)
-# create handler and set level to info
-handler = logging.FileHandler('{}provisioning.log'.format(
-    settings.LOG_FILEPATH)
-)
-handler.setLevel(logging.INFO)
-formatter = logging.Formatter(
-    '%(asctime)s: %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p'
-)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+# standard logging
+info_logger = logging.getLogger('info_logger')
+debug_logger = logging.getLogger('debug_logger')
+error_logger = logging.getLogger('error_logger')
+# create a logger for collecting failed inserts
+provisioning_logger = logging.getLogger('provisioning_logger')
 
 
 def _generate_files(results, filetype, group):
@@ -135,12 +132,16 @@ def _generate_files(results, filetype, group):
 
         # Save the xml file
         phile.save('{}.xlsx'.format(root))
+        # close the xml file
+        phile.close()
 
-    else:
-        print("filetype must be: 'csv' or 'xlsx'\n")
+    else: # we will never arrive here but just in case
+        if test:
+            print("filetype must be: 'csv' or 'xlsx'\n")
+            parser.print_help()
+        else:
+            info_logger.info("filetype must be: 'csv' or 'xlsx'")
         phile = None
-        parser.print_help()
-        exit(-1)
 
     return phile
 
@@ -153,8 +154,11 @@ def main():
     key = settings.INFORMIX_DEBUG
 
     if filetype not in ['csv','xlsx']:
-        print("filetype must be: 'csv' or 'xlsx'\n")
-        parser.print_help()
+        if test:
+            print("filetype must be: 'csv' or 'xlsx'\n")
+            parser.print_help()
+        else:
+            info_logger.info("filetype must be: 'csv' or 'xlsx'")
         exit(-1)
 
     if database == 'train':
@@ -162,14 +166,18 @@ def main():
     elif database == 'cars':
         EARL = INFORMIX_EARL_PROD
     else:
-        print("database must be: 'cars' or 'train'\n")
-        parser.print_help()
+        if test:
+            print("database must be: 'cars' or 'train'\n")
+            parser.print_help()
+        else:
+            info_logger.info("database must be: 'cars' or 'train'")
         exit(-1)
 
     sql = SELECT_NEW_PEOPLE
+
     if test:
-        print("new people sql")
-        print("sql = {}".format(sql))
+        debug_logger.debug("new people sql")
+        debug_logger.debug("sql = {}".format(sql))
 
     people = []
     objects = do_sql(sql, key=key, earl=EARL)
@@ -179,36 +187,104 @@ def main():
     # error after the first iteration.
     for o in objects:
         if test:
-            print(o)
+            debug_logger.debug(o)
         people.append(o)
 
     if people:
+        length = len(people)
+        sitrep = 1
+        notes = ''
+
+        session = get_session(EARL)
+
         response = _generate_files(people, filetype, 'new_people')
 
         if not response:
-            print("no response")
+            sitrep = 0
+            info_logger.info("{} file was not generated".format(filetype))
+            info_logger.info("people = {}".format(people))
+
+            # create batch record
+            rec = ProvisioningBatchRec(
+                total = length, sitrep = sitrep, notes = notes
+            )
+            session.add(rec)
+            session.commit()
         else:
-            print("{} object(s) found for provisioning.".format(len(people)))
+            # create batch record
+            rec = ProvisioningBatchRec(
+                total = length, sitrep = sitrep, notes = notes
+            )
+            session.add(rec)
+            session.commit()
+
+            # batch record ID
+            rid = rec.batch_no
+
             for p in people:
+                notes = ''
+                csv = '|'.join(
+                    ['{}'.format(value) for (key, value) in p.items()]
+                )
+                debug_logger.debug("csv = {}".format(csv))
+
                 try:
                     sql = INSERT_EMAIL_RECORD(cid=p.id, ldap=p.loginid)
                     if test:
-                        print(sql)
+                        debug_logger.debug(
+                            "INSERT_EMAIL_RECORD = {}".format(sql)
+                        )
                     else:
                         do_sql(sql, key=key, earl=EARL)
                 except:
-                    logger.info("failed insert = {}".format(p))
+                    notes += "failed insert = {}|{}|".format(p,sql)
+                    provisioning_logger.info(
+                        "INSERT_EMAIL_RECORD fail = {}|{}".format(p,sql)
+                    )
 
                 try:
                     sql = INSERT_CVID_RECORD(cid=p.id, ldap=p.loginid)
                     if test:
-                        print(sql)
+                        debug_logger.debug(
+                            "INSERT_CVID_RECORD = {}".format(sql)
+                        )
                     else:
                         do_sql(sql, key=key, earl=EARL)
                 except:
-                    logger.info("failed insert = {}".format(p))
+                    notes += "failed insert = {}|{}".format(p,sql)
+                    provisioning_logger.info(
+                        "INSERT_CVID_RECORD fail = {}|{}".format(p,sql)
+                    )
+
+                # insert detail record
+                sql = INSERT_DETAIL_RECORD(
+                    batch_id = rid, username = p.loginid,
+                    last_name = p.lastname, first_name = p.firstname,
+                    cid = p.id, faculty = p.facultystatus,
+                    staff = p.staffstatus, student = p.studentstatus,
+                    retire = p.retirestatus, dob = p.dob,
+                    postal_code = p.zip, account = p.accttypes,
+                    proxid = p.proxid, phone_ext = p.phoneext,
+                    departments = p.depts, csv = csv, notes = notes
+                )
+
+                try:
+                    if test:
+                        debug_logger.debug("sql = {}".format(sql))
+                    do_sql(sql, key=key, earl=EARL)
+                except Exception as e:
+                    provisioning_logger.info("insert fail: p = {}".format(p))
+                    if test:
+                        error_logger.error("sql fail = {}".format(e))
+                        print("die: sql fail")
+                        exit(-1)
+
+        session.close()
     else:
-        print("No objects found for provisioning.")
+        if test:
+            print("No objects found for provisioning.")
+        else:
+            info_logger.info("No objects found for provisioning.")
 
 
 ######################

@@ -258,13 +258,13 @@ AND
     job_rec.hrdept                  NOT IN  ("PEND")
 AND
     NVL(job_rec.end_date, TODAY)    >=      TODAY
-    AND
-        cvid_rec.ldap_name      IS  NULL
+--    AND
+--        cvid_rec.ldap_name      IS  NULL
 -- Remove duplicates
 GROUP BY
     loginID, subID.id, cvid_rec.ldap_name, subID.firstname, subID.lastname, facultyStatus, staffStatus, acctTypes, dob, zip
 ORDER BY
-    id;
+    id
 '''
 
 # Create the Carthage email record for the user.
@@ -272,7 +272,7 @@ INSERT_EMAIL_RECORD = '''
     INSERT INTO
         aa_rec (id, aa, beg_date, peren, line1, ofc_add_by)
     VALUES
-        ({cid}, 'EML1', TODAY, 'N', '{ldap}@carthage.edu', 'INFS')
+        ({cid}, "EML1", TODAY, "N", "{ldap}@carthage.edu", "INFS")
 '''.format
 
 # Create the cvid record for the user
@@ -281,5 +281,26 @@ INSERT_CVID_RECORD = '''
     INSERT INTO
         cvid_rec (old_id, old_id_num, cx_id, cx_id_char, ldap_name)
     VALUES
-        ('SinceCvrsn', {cid}, {cid}, '{cid}', '{ldap}')
+        ("SinceCvrsn", {cid}, {cid}, "{cid}", "{ldap}")
+'''.format
+
+INSERT_BATCH_RECORD = '''
+    INSERT INTO
+        cc_provisioning_batch_rec (sitrep, total, notes)
+    VALUES
+        ({sitrep},{total},"{notes}")
+'''.format
+
+INSERT_DETAIL_RECORD = '''
+    INSERT INTO
+      cc_provisioning_detail_rec (
+        batch, username, last_name, first_name, id, faculty, staff, student,
+        retire, birth_date, postal_code, account, proxid, phone_ext,
+        departments, csv, notes
+      )
+    VALUES (
+        {batch_id},"{username}","{last_name}","{first_name}",{cid},"{faculty}",
+        "{staff}","{student}","{retire}",{dob},"{postal_code}","{account}",0,
+        "{phone_ext}","{departments}","{csv}","{notes}"
+    )
 '''.format
