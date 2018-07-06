@@ -284,13 +284,6 @@ INSERT_CVID_RECORD = '''
         ("SinceCvrsn", {cid}, {cid}, "{cid}", "{ldap}")
 '''.format
 
-INSERT_BATCH_RECORD = '''
-    INSERT INTO
-        cc_provisioning_batch_rec (sitrep, total, notes)
-    VALUES
-        ({sitrep},{total},"{notes}")
-'''.format
-
 INSERT_DETAIL_RECORD = '''
     INSERT INTO
       cc_provisioning_detail_rec (
