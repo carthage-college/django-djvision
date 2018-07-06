@@ -5,6 +5,6 @@ from djvision.dashboard import views
 urlpatterns = [
     url(
         r'^$',
-        views.home, name='home'
+        views.home, name='dashboard_home'
     ),
 ]

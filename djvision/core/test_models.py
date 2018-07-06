@@ -48,3 +48,20 @@ class CoreModelsTestCase(TestCase):
                 o.username, o.last_name, o.first_name, o.id, o.birth_date,
                 o.batch_rec.created_at, o.batch_rec.total, o.batch_rec.sitrep
             ))
+
+    def test_select_batch(self):
+        print("\n")
+        print("selectd all batch records")
+        seperator()
+
+        session = self.session
+
+        objects = session.query(ProvisioningBatchRec).all()
+        print("length of objects")
+        print(len(objects))
+        for o in objects:
+            for d in o.details:
+                print("{}|{}|{}|{}|{}|{}|{}|{}".format(
+                    d.username, d.last_name, d.first_name, d.id, d.birth_date,
+                    o.created_at, o.total, o.sitrep
+                ))

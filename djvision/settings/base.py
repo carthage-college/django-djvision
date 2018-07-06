@@ -72,6 +72,8 @@ DATABASES = {
     },
 }
 INSTALLED_APPS = [
+    'bootstrap_admin',
+    'bootstrap4',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -204,6 +206,14 @@ SERVER_MAIL=''
 # Provisioning data directory
 PROVISIONING_DATA_DIRECTORY = ''
 PROVISIONING_DATA_DIRECTORY_TEST = ''
+# unit tests
+TEST_CREATED_AT_DATE = ''
+# bootstrap admin
+BOOTSTRAP_ADMIN_SIDEBAR_MENU = True
+# bootstrap forms
+BOOTSTRAP4 = {
+    'required_css_class': 'required',
+}
 # logging
 LOG_FILEPATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs/')
 DEBUG_LOG_FILENAME = LOG_FILEPATH + 'debug.log'

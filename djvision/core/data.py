@@ -16,6 +16,14 @@ class ProvisioningBatchRec(Base):
     sitrep = Column(SmallInteger)
     notes = Column(Text)
 
+    # relationships
+    details = relationship(
+      'ProvisioningDetailRec',
+      backref='ProvisioningDetailRec.batch',
+      primaryjoin='ProvisioningBatchRec.batch_no==ProvisioningDetailRec.batch',
+      lazy='dynamic'
+    )
+
     def __repr__(self):
         return str(self.batch_no)
 

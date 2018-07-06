@@ -1,0 +1,72 @@
+<div class="table-responsive">
+  <div class="card-body" style="margin-bottom:20px">
+    <table class="dataTable display table-bordered table-hover" id="provisioning-data">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Last name</th>
+                <th>First name</th>
+                <th>ID</th>
+                <th>Account group</th>
+                <th>DOB</th>
+                <th>Zip</th>
+                <th>Account type</th>
+                <th>ProxID</th>
+                <th>Ext</th>
+                <th>Depts</th>
+                <th>Notes</th>
+                <th>Status</th>
+                <th>Created at</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for o in objects %}
+            <tr>
+                <td>{{o.username}}</td>
+                <td>{{o.last_name}}</td>
+                <td>{{o.first_name}}</td>
+                <td>{{o.id}}</td>
+                <td>
+                    {% if o.faculty %}
+                        Faculty
+                    {% else %}{% if o.staff %}
+                        Staff
+                    {% else %}{% if o.student %}
+                        Student
+                    {% else %}{% if o.retire %}
+                        Retire
+                    {% endif %}
+                </td>
+                <td>{{o.birth_date}}</td>
+                <td>{{o.postal_code}}</td>
+                <td>{{o.account}}</td>
+                <td>{{o.proxid}}</td>
+                <td>{{o.phone_ext}}</td>
+                <td>{{o.departments}}</td>
+                <td>{{o.notes}}</td>
+                <td>{{o.batch_rec.sitrep}}</td>
+                <td title="{{o.csv}}">{{o.created_at}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Username</th>
+                <th>Last name</th>
+                <th>First name</th>
+                <th>ID</th>
+                <th>Account type</th>
+                <th>DOB</th>
+                <th>Zip</th>
+                <th>Account</th>
+                <th>ProxID</th>
+                <th>Ext</th>
+                <th>Depts</th>
+                <th>Notes</th>
+                <th>Created at</th>
+            </tr>
+        </tfoot>
+    </table>
+  </div>
+</div>
+<!-- /.table-responsive -->
