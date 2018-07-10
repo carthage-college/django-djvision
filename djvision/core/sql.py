@@ -258,8 +258,8 @@ AND
     job_rec.hrdept                  NOT IN  ("PEND")
 AND
     NVL(job_rec.end_date, TODAY)    >=      TODAY
---AND
---    cvid_rec.ldap_name      IS  NULL
+AND
+    cvid_rec.ldap_name      IS  NULL
 {where}
 -- Remove duplicates
 GROUP BY
