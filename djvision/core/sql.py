@@ -258,14 +258,15 @@ AND
     job_rec.hrdept                  NOT IN  ("PEND")
 AND
     NVL(job_rec.end_date, TODAY)    >=      TODAY
-AND
-    cvid_rec.ldap_name      IS  NULL
+--AND
+--    cvid_rec.ldap_name      IS  NULL
+{where}
 -- Remove duplicates
 GROUP BY
     loginID, subID.id, cvid_rec.ldap_name, subID.firstname, subID.lastname, facultyStatus, staffStatus, acctTypes, dob, zip
 ORDER BY
     id
-'''
+'''.format
 
 # Create the Carthage email record for the user.
 INSERT_EMAIL_RECORD = '''
@@ -293,7 +294,7 @@ INSERT_DETAIL_RECORD = '''
       )
     VALUES (
         {batch_id},"{username}","{last_name}","{first_name}",{cid},"{faculty}",
-        "{staff}","{student}","{retire}",{dob},"{postal_code}","{account}",0,
+        "{staff}","{student}","{retire}",DATE('{dob}'),"{postal_code}","{account}",0,
         "{phone_ext}","{departments}","{csv}","{notes}"
     )
 '''.format

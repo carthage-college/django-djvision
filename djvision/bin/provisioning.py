@@ -173,7 +173,7 @@ def main():
             info_logger.info("database must be: 'cars' or 'train'")
         exit(-1)
 
-    sql = SELECT_NEW_PEOPLE
+    sql = SELECT_NEW_PEOPLE(where = '')
 
     if test:
         debug_logger.debug("new people sql")
@@ -257,13 +257,19 @@ def main():
                         "INSERT_CVID_RECORD fail = {}|{}".format(p,sql)
                     )
 
+                # convert datetime object to string because informix
+                try:
+                    dob = p.dob.strftime("%m-%d-%Y")
+                except:
+                    dob = None
+
                 # insert detail record
                 sql = INSERT_DETAIL_RECORD(
                     batch_id = rid, username = p.loginid,
                     last_name = p.lastname, first_name = p.firstname,
                     cid = p.id, faculty = p.facultystatus,
                     staff = p.staffstatus, student = p.studentstatus,
-                    retire = p.retirestatus, dob = p.dob,
+                    retire = p.retirestatus, dob = dob,
                     postal_code = p.zip, account = p.accttypes,
                     proxid = p.proxid, phone_ext = p.phoneext,
                     departments = p.depts, csv = csv, notes = notes
