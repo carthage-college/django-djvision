@@ -44,7 +44,9 @@
                 <td>{{o.phone_ext}}</td>
                 <td>{{o.departments}}</td>
                 <td>{{o.notes}}</td>
-                <td>{{o.batch_rec.sitrep}}</td>
+                <td>
+                {% if o.batch_rec.sitrep == 1 %}Success{% else %}Fail{% endif %}
+                </td>
                 <td title="{{o.csv}}">{{o.created_at}}</td>
             </tr>
         {% endfor %}
@@ -63,6 +65,7 @@
                 <th>Ext</th>
                 <th>Depts</th>
                 <th>Notes</th>
+                <th>Status</th>
                 <th>Created at</th>
             </tr>
         </tfoot>
