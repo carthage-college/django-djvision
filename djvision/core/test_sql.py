@@ -22,7 +22,8 @@ class CoreSqlTestCase(TestCase):
         print("select new people SQL incantations")
         seperator()
 
-        objects = do_sql(SELECT_NEW_PEOPLE, key='debug', earl=EARL)
+        sql = SELECT_NEW_PEOPLE(where = '')
+        objects = do_sql(sql, key='debug', earl=EARL)
 
         for o in objects:
             print("{}|{}|{}|{}|{}".format(
