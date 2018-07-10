@@ -1,4 +1,4 @@
-{% extends "dashboard/base.html" %}
+{% extends "base.html" %}
 {% load bootstrap4 %}
 {% block extra_style %}
 {{block.super}}
@@ -52,12 +52,13 @@ $(function() {
 {% block navbar-header %}
 <a href="{% url 'dashboard_home' %}" class="mr-sm-3 mr-lg-3"><i class="fa fa-home fa-2x"></i></a>
 <a class="navbar-brand"
-    href="http://www.carthage.edu/campus-life/health-counseling/">
-    HCC and AT Medical Forms
+    href="{{root_url}}">
+    LIS
 </a>
 {% endblock %}
 {% block navbar-top-links %}
   <ul class="navbar-nav ml-auto">
+    <!--
     <li class="nav-item">
       <form class="form-inline my-2 my-lg-0 mr-sm-3 mr-lg-3" action="{# url 'search_advanced' #}" method="post">
         {% csrf_token %}
@@ -71,6 +72,7 @@ $(function() {
         </div>
       </form>
     </li>
+    -->
     <li class="dropdown user-dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-user"></i> {{user.first_name|default:"Dashboard"}}
@@ -103,18 +105,12 @@ $(function() {
   </li>
   {% if user.is_superuser %}
   <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Administration">
-    <a class="nav-link" href="/campus-life/medical/forms/admin/">
+    <a class="nav-link" href="{% url 'admin:index' %}">
       <i class="fa fa-fw fa fa-cog" aria-hidden="true"></i>
       <span class="nav-link-text">Administration</span>
     </a>
   </li>
   {% endif %}
-  <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Medical Forms">
-    <a class="nav-link" href="{# url 'home' #}">
-      <i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>
-      <span class="nav-link-text">Medical Forms</span>
-    </a>
-  </li>
   <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Carthage Home">
     <a class="nav-link" href="https://www.carthage.edu/">
       <i class="fa fa-fw fa fa-home" aria-hidden="true"></i>

@@ -46,5 +46,9 @@ urlpatterns = [
     # dashboard
     url(
         r'^dashboard/', include('djvision.dashboard.urls')
-    )
+    ),
+    url(
+        r'^$',
+        RedirectView.as_view(url=reverse_lazy('dashboard_home'))
+    ),
 ]
