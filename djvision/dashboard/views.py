@@ -11,10 +11,10 @@ from djzbar.decorators.auth import portal_auth_required
 from djzbar.utils.informix import get_session
 
 
-#@portal_auth_required(
-    #group='LIS', session_var='DJVISION_AUTH',
-    #redirect_url=reverse_lazy('access_denied')
-#)
+@portal_auth_required(
+    group='LIS', session_var='DJVISION_AUTH',
+    redirect_url=reverse_lazy('access_denied')
+)
 def home(request):
     error = None
     objects = None
