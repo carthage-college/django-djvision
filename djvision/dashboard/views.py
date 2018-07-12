@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.shortcuts import render
-from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 
 from djvision.core.data import ProvisioningDetailRec
@@ -22,11 +21,6 @@ def home(request):
         form = DetailCreatedForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            #message = "Error: {}".format(error.message)
-            #messages.add_message(
-                #request, messages.ERROR, message,
-                #extra_tags='alert alert-danger'
-            #)
             session = get_session(settings.INFORMIX_EARL)
             objects = session.query(ProvisioningDetailRec).filter(
                 ProvisioningDetailRec.created_at >= data['created_at']
