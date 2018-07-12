@@ -27,11 +27,19 @@
         <tbody>
         {% for o in objects %}
             <tr>
-                <td>{{o.username}}</td>
-                <td>{{o.last_name}}</td>
-                <td>{{o.first_name}}</td>
-                <td>{{o.id}}</td>
-                <td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.username}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.last_name}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.first_name}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.id}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
                     {% if o.faculty %}
                         Faculty
                     {% else %}{% if o.staff %}
@@ -42,17 +50,33 @@
                         Retire
                     {% endif %}{% endif %}{% endif %}{% endif %}
                 </td>
-                <td>{{o.birth_date}}</td>
-                <td>{{o.postal_code}}</td>
-                <td>{{o.account}}</td>
-                <td>{{o.proxid}}</td>
-                <td>{{o.phone_ext}}</td>
-                <td>{{o.departments}}</td>
-                <td>{{o.notes}}</td>
-                <td>
-                {% if o.batch_rec.sitrep == 1 %}Success{% else %}Fail{% endif %}
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.birth_date}}
                 </td>
-                <td title="{{o.csv}}">{{o.created_at}}</td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.postal_code}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.account}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.proxid}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.phone_ext}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.departments}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.notes}}
+                </td>
+                <td{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {% if o.batch_rec.sitrep == 1 %}Success{% else %}Fail{% endif %}
+                </td>
+                <td title="{{o.csv}}"{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
+                  {{o.created_at}}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
