@@ -94,7 +94,8 @@ def _generate_files(results, filetype, group):
         [facultyStatus, staffStatus, studentStatus, retireStatus,]
         dob, zip, acct-types, proxID, phoneExt, depts
 
-    at least one of the Status fields must be populated
+    at least one of the Status fields must be populated with an 'A'
+    or an 'R' for the retireStatus field
     """
 
     if test:
