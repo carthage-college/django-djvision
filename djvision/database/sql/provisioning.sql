@@ -254,8 +254,6 @@ WHERE
     --Administration, Part-time Admin, FT Faculty, Hourly Employee, Part-time Hourly, Part-time Fac Day, Student Worker, TLE, Part-time Athletics, Part-time Fac GPS
     job_rec.hrstat                  IN      ("AD","ADPT","FT","HR","HRPT","PT","STD","TLE","PATH","PTGP")
 AND
-    job_rec.hrdept                  NOT IN  ("PEND")
-AND
     NVL(job_rec.end_date, TODAY)    >=      TODAY
 AND
     cvid_rec.ldap_name              IS      NULL
