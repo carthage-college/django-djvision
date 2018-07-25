@@ -191,6 +191,8 @@ def main():
     for o in objects:
         if test:
             debug_logger.debug(o)
+        else:
+            info_logger.info("o = {}".format(o))
         people.append(o)
 
     if people:
