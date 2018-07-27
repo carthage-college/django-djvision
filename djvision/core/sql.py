@@ -52,6 +52,7 @@ SELECT_NEW_PEOPLE = '''
         )
     AND
         cvid_rec.ldap_name      IS  NULL
+        --TRIM(NVL(cvid_rec.ldap_name, ''))  =  ''
 UNION
 -- MSW students (we use adm_rec since they do not end up appearing in our student information system, but they need to be provisioned for printing, etc.)
     SELECT
@@ -95,6 +96,7 @@ UNION
         acad_cal_rec.beg_date   <=  TODAY + (SELECT pregrace FROM provsnrule_rec WHERE provsystm = 'JenzUpld' AND subsys = 'STU' AND ruleid = 'MSW')
     AND
         cvid_rec.ldap_name      IS  NULL
+        --TRIM(NVL(cvid_rec.ldap_name, ''))  =  ''
 UNION
 -- stu_acad_rec records
     SELECT
@@ -133,6 +135,7 @@ UNION
         stu_acad_rec.reg_stat   IN  ('R','C')
     AND
         cvid_rec.ldap_name      IS  NULL
+        --TRIM(NVL(cvid_rec.ldap_name, ''))  =  ''
 UNION
 -- prog_enr_rec records (should be redundant with above stu_acad_rec records)
     SELECT
@@ -179,6 +182,7 @@ UNION
         stu_acad_rec.reg_stat   IS  NULL
     AND
         cvid_rec.ldap_name      IS  NULL
+        --TRIM(NVL(cvid_rec.ldap_name, ''))  =  ''
 UNION
 -- regclr_rec recoprds (this will pick up straggling Adult Ed students because of the way Continuing Studies clears everyone who has recently been enrolled)
     SELECT
@@ -214,6 +218,7 @@ UNION
         TODAY                   <=  NVL(acad_cal_rec.end_date, TODAY)
     AND
         cvid_rec.ldap_name      IS  NULL
+        --TRIM(NVL(cvid_rec.ldap_name, ''))  =  ''
 UNION
 -- Current employees, excluding student-employees
 SELECT
@@ -258,6 +263,7 @@ AND
     NVL(job_rec.end_date, TODAY)    >=      TODAY
 AND
     cvid_rec.ldap_name      IS  NULL
+    --TRIM(NVL(cvid_rec.ldap_name, ''))  =  ''
 {where}
 -- Remove duplicates
 GROUP BY
