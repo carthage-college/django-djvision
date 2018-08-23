@@ -257,6 +257,58 @@ AND
     NVL(job_rec.end_date, TODAY)    >=      TODAY
 AND
     cvid_rec.ldap_name              IS      NULL
+
+UNION
+
+-- provision incoming students
+SELECT
+    TRIM(NVL(cvid_rec.ldap_name, NVL(subCVID.name_only || subCVID.total, subID.username))) AS loginID,
+    subID.lastname, subID.firstname, subID.id, '' AS facultyStatus, '' AS staffStatus, 'A' AS studentStatus, '' AS retireStatus, profile_rec.birth_date AS dob, subID.zip AS zip,
+    'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+FROM adm_rec INNER JOIN    (
+                            SELECT
+                                id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(firstname[1,1]) || LOWER(TRIM(lastname)) AS username, zip
+                            FROM
+                                id_rec
+                        )    subID        ON    adm_rec.id                =    subID.id
+            INNER JOIN    profile_rec        ON    adm_rec.id                =    profile_rec.id
+
+            LEFT JOIN   cvid_rec        ON  adm_rec.id              =   cvid_rec.cx_id
+            LEFT JOIN    (
+                            SELECT
+                                LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(TRIM(ldap_name),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),'0','')) AS name_only,
+                                COUNT(*) AS total
+                            FROM
+                                cvid_rec
+                            WHERE
+                                TRIM(NVL(ldap_name, ''))    <>    ''
+                            GROUP BY
+                                name_only
+                        )    subCVID        ON    subID.username    =    subCVID.name_only
+
+WHERE ( -- find incoming students based on registration for an advance registration session
+        adm_rec.plan_enr_yr = year(current)
+        AND (cvid_rec.ldap_name is null or trim(cvid_rec.ldap_name) = "")
+        AND adm_rec.primary_app = 'Y'
+        AND adm_rec.app_no IN (
+                SELECT ctc_rec.app_no FROM ctc_rec
+                WHERE ctc_rec.tick = 'ADM'
+                AND ctc_rec.resrc IN('ADVREGDT','INADVREG','TADVREG')
+                AND ctc_rec.stat IN('C','E')
+                AND ctc_rec.due_date - 10 <= TODAY
+                AND ctc_rec.add_date >= TODAY - 390
+            )
+      )
+      OR
+      ( -- find incoming students based on whether they have paid a deposit, or (for transfer students) whether their enrstat is 'enrolled'
+        adm_rec.plan_enr_yr = year(current)
+        AND (cvid_rec.ldap_name is null or trim(cvid_rec.ldap_name) = "")
+        AND adm_rec.primary_app = 'Y'
+        AND enrstat in ("DEPOSIT","ENROLLED")
+        AND (trim(ldap_name) = "" or ldap_name is null)
+        AND month(current) IN (5,6,7,8,9)  -- this rule is a fallback that we only run during the summer to make sure late arrivers get provisioned even if they don't have an advance reg contact record
+      )
+
 -- Remove duplicates
 GROUP BY
     loginID, subID.id, cvid_rec.ldap_name, subID.firstname, subID.lastname, facultyStatus, staffStatus, acctTypes, dob, zip
