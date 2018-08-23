@@ -27,9 +27,9 @@ os.environ['LD_LIBRARY_PATH'] = settings.LD_LIBRARY_PATH
 os.environ['LD_RUN_PATH'] = settings.LD_RUN_PATH
 
 from djvision.core.sql import (
-    INSERT_CVID_RECORD, INSERT_DETAIL_RECORD, INSERT_EMAIL_RECORD
+    INSERT_CVID_RECORD, INSERT_DETAIL_RECORD, INSERT_EMAIL_RECORD,
+    SELECT_NEW_PEOPLE
 )
-from djvision.core.sql import SELECT_NEW_PEOPLE
 from djvision.core.data import ProvisioningBatchRec
 
 from djzbar.utils.informix import do_sql
@@ -179,6 +179,8 @@ def main():
     if test:
         debug_logger.debug("new people sql")
         debug_logger.debug("sql = {}".format(sql))
+    else:
+        info_logger.info("sql = {}".format(sql))
 
     people = []
     objects = do_sql(sql, key=key, earl=EARL)
@@ -189,6 +191,8 @@ def main():
     for o in objects:
         if test:
             debug_logger.debug(o)
+        else:
+            info_logger.info("o = {}".format(o))
         people.append(o)
 
     if people:
