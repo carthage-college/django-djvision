@@ -336,9 +336,9 @@ INSERT_EMAIL_RECORD = '''
 # (this prevents the user from being picked up by the "add new" process again.
 INSERT_CVID_RECORD = '''
     INSERT INTO
-        cvid_rec (old_id, old_id_num, cx_id, cx_id_char, ldap_name)
+        cvid_rec (old_id,old_id_num,cx_id,cx_id_char,ldap_name,ldap_add_date)
     VALUES
-        ("SinceCvrsn", {cid}, {cid}, "{cid}", "{ldap}")
+        ("SinceCvrsn", {cid}, {cid}, "{cid}", "{ldap}", CURRENT)
 '''.format
 
 INSERT_DETAIL_RECORD = '''
@@ -350,7 +350,7 @@ INSERT_DETAIL_RECORD = '''
       )
     VALUES (
         {batch_id},"{username}","{last_name}","{first_name}",{cid},"{faculty}",
-        "{staff}","{student}","{retire}",DATE('{dob}'),"{postal_code}","{account}",0,
-        "{phone_ext}","{departments}","{csv}","{notes}"
+        "{staff}","{student}","{retire}",DATE('{dob}'),"{postal_code}",
+        "{account}",0,"{phone_ext}","{departments}","{csv}","{notes}"
     )
 '''.format
