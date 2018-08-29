@@ -290,8 +290,8 @@ LOGGING = {
     },
     'loggers': {
         'provisioning_logger': {
-            'handlers': ['error_logfile'],
-            'level': 'ERROR'
+            'handlers': ['provisioning_logfile'],
+            'level': 'INFO'
          },
         'error_logger': {
             'handlers': ['error_logfile'],
