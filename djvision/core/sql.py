@@ -8,7 +8,7 @@ SELECT_NEW_PEOPLE = '''
         adm_rec INNER JOIN    (
                                 SELECT
 
-                                    id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, REPLACE(REPLACE(LOWER(firstname[1,1]) || TRIM(NVL(lastname, '')), ' ', ''), '-', '') AS username, zip
+                                    id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
                                 FROM
                                     id_rec
                             )    subID        ON    adm_rec.id                =    subID.id
@@ -63,7 +63,7 @@ UNION
     FROM
         adm_rec INNER JOIN    (
                                 SELECT
-                                    id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, REPLACE(REPLACE(LOWER(firstname[1,1]) || TRIM(NVL(lastname, '')), ' ', ''), '-', '') AS username, zip
+                                    id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
                                 FROM
                                     id_rec
                             )    subID        ON    adm_rec.id                =    subID.id
@@ -109,7 +109,7 @@ UNION
                                                     AND stu_acad_rec.yr     =   acad_cal_rec.yr
                         INNER JOIN    (
                                         SELECT
-                                            id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, REPLACE(REPLACE(LOWER(firstname[1,1]) || TRIM(NVL(lastname, '')), ' ', ''), '-', '') AS username, zip
+                                            id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
                                         FROM
                                             id_rec
                                     )    subID        ON    stu_acad_rec.id        =    subID.id
@@ -146,7 +146,7 @@ UNION
     FROM
         prog_enr_rec    INNER JOIN    (
                                         SELECT
-                                            id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, REPLACE(REPLACE(LOWER(firstname[1,1]) || TRIM(NVL(lastname, '')), ' ', ''), '-', '') AS username, zip
+                                            id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
                                         FROM
                                             id_rec
                                     )    subID        ON    prog_enr_rec.id            =    subID.id
@@ -196,7 +196,7 @@ UNION
                                                 AND acad_cal_rec.subsess    =   ' '
                     INNER JOIN    (
                                     SELECT
-                                        id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, REPLACE(REPLACE(LOWER(firstname[1,1]) || TRIM(NVL(lastname, '')), ' ', ''), '-', '') AS username, zip
+                                        id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
                                     FROM
                                         id_rec
                                 )    subID        ON    regclr_rec.id            =    subID.id
@@ -240,7 +240,7 @@ SELECT
 FROM
     job_rec INNER JOIN  (
                             SELECT
-                                id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, REPLACE(REPLACE(LOWER(firstname[1,1]) || TRIM(NVL(lastname, '')), ' ', ''), '-', '') AS username, zip
+                                id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
                             FROM
                                 id_rec
                         )    subID    ON  job_rec.id  =   subID.id
@@ -276,7 +276,7 @@ SELECT
     'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
 FROM adm_rec INNER JOIN    (
                             SELECT
-                                id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, REPLACE(REPLACE(LOWER(firstname[1,1]) || TRIM(NVL(lastname, '')), ' ', ''), '-', '') AS username, zip
+                                id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
                             FROM
                                 id_rec
                         )    subID        ON    adm_rec.id                =    subID.id
