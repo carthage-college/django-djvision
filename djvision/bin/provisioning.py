@@ -112,8 +112,7 @@ def _generate_files(results, filetype, group):
         output = csv.writer(phile, quoting=csv.QUOTE_ALL)
 
         for result in results:
-            if result.loginid:
-                output.writerow(result)
+            output.writerow(result)
 
         # close the csv file
         phile.close()
@@ -193,7 +192,11 @@ def main():
             debug_logger.debug(o)
         else:
             info_logger.info("o = {}".format(o))
-        people.append(o)
+        # we need a username to proceed
+        if o.loginid:
+            people.append(o)
+        else:
+            provisioning_logger.info("no loginid: {}".format(o))
 
     if people:
         length = len(people)
@@ -227,72 +230,69 @@ def main():
             rid = rec.batch_no
 
             for p in people:
-                if p.loginid:
-                    notes = ''
-                    csv = '|'.join(
-                        ['{}'.format(value) for (key, value) in p.items()]
-                    )
+                notes = ''
+                csv = '|'.join(
+                    ['{}'.format(value) for (key, value) in p.items()]
+                )
+                if test:
+                    debug_logger.debug("csv = {}".format(csv))
+
+                try:
+                    sql = INSERT_EMAIL_RECORD(cid=p.id, ldap=p.loginid)
                     if test:
-                        debug_logger.debug("csv = {}".format(csv))
-
-                    try:
-                        sql = INSERT_EMAIL_RECORD(cid=p.id, ldap=p.loginid)
-                        if test:
-                            debug_logger.debug(
-                                "INSERT_EMAIL_RECORD = {}".format(sql)
-                            )
-                        else:
-                            do_sql(sql, key=key, earl=EARL)
-                    except:
-                        notes += "failed insert = {}|{}|".format(p,sql)
-                        provisioning_logger.info(
-                            "INSERT_EMAIL_RECORD fail = {}|{}".format(p,sql)
+                        debug_logger.debug(
+                            "INSERT_EMAIL_RECORD = {}".format(sql)
                         )
-
-                    try:
-                        sql = INSERT_CVID_RECORD(cid=p.id, ldap=p.loginid)
-                        if test:
-                            debug_logger.debug(
-                                "INSERT_CVID_RECORD = {}".format(sql)
-                            )
-                        else:
-                            do_sql(sql, key=key, earl=EARL)
-                    except:
-                        notes += "failed insert = {}|{}".format(p,sql)
-                        provisioning_logger.info(
-                            "INSERT_CVID_RECORD fail = {}|{}".format(p,sql)
-                        )
-
-                    # convert datetime object to string because informix
-                    try:
-                        dob = p.dob.strftime("%m-%d-%Y")
-                    except:
-                        dob = None
-
-                    # insert detail record
-                    sql = INSERT_DETAIL_RECORD(
-                        batch_id = rid, username = p.loginid,
-                        last_name = p.lastname, first_name = p.firstname,
-                        cid = p.id, faculty = p.facultystatus,
-                        staff = p.staffstatus, student = p.studentstatus,
-                        retire = p.retirestatus, dob = dob,
-                        postal_code = p.zip, account = p.accttypes,
-                        proxid = p.proxid, phone_ext = p.phoneext,
-                        departments = p.depts, csv = csv, notes = notes
+                    else:
+                        do_sql(sql, key=key, earl=EARL)
+                except:
+                    notes += "failed insert = {}|{}|".format(p,sql)
+                    provisioning_logger.info(
+                        "INSERT_EMAIL_RECORD fail = {}|{}".format(p,sql)
                     )
 
-                    try:
-                        if test:
-                            debug_logger.debug("sql = {}".format(sql))
+                try:
+                    sql = INSERT_CVID_RECORD(cid=p.id, ldap=p.loginid)
+                    if test:
+                        debug_logger.debug(
+                            "INSERT_CVID_RECORD = {}".format(sql)
+                        )
+                    else:
                         do_sql(sql, key=key, earl=EARL)
-                    except Exception as e:
-                        provisioning_logger.info("insert fail: p = {}".format(p))
-                        if test:
-                            error_logger.error("sql fail = {}".format(e))
-                            print("die: sql fail")
-                            exit(-1)
-                else:
-                    provisioning_logger.info("No loginID = {}".format(p))
+                except:
+                    notes += "failed insert = {}|{}".format(p,sql)
+                    provisioning_logger.info(
+                        "INSERT_CVID_RECORD fail = {}|{}".format(p,sql)
+                    )
+
+                # convert datetime object to string because informix
+                try:
+                    dob = p.dob.strftime("%m-%d-%Y")
+                except:
+                    dob = None
+
+                # insert detail record
+                sql = INSERT_DETAIL_RECORD(
+                    batch_id = rid, username = p.loginid,
+                    last_name = p.lastname, first_name = p.firstname,
+                    cid = p.id, faculty = p.facultystatus,
+                    staff = p.staffstatus, student = p.studentstatus,
+                    retire = p.retirestatus, dob = dob,
+                    postal_code = p.zip, account = p.accttypes,
+                    proxid = p.proxid, phone_ext = p.phoneext,
+                    departments = p.depts, csv = csv, notes = notes
+                )
+
+                try:
+                    if test:
+                        debug_logger.debug("sql = {}".format(sql))
+                    do_sql(sql, key=key, earl=EARL)
+                except Exception as e:
+                    provisioning_logger.info("insert fail: p = {}".format(p))
+                    if test:
+                        provisioning_logger.info("sql fail = {}".format(e))
+                        print("die: sql fail")
+                        exit(-1)
 
         session.close()
     else:
