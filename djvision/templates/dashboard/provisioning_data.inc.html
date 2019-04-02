@@ -75,7 +75,7 @@
                   {% if o.batch_rec.sitrep == 1 %}Success{% else %}Fail{% endif %}
                 </td>
                 <td title="{{o.csv}}"{% if o.batch_rec.sitrep == 0 %} class="minor"{% endif %}>
-                  {{o.created_at}}
+                  {{o.created_at|date:'Y-m-d'}}
                 </td>
             </tr>
         {% endfor %}
