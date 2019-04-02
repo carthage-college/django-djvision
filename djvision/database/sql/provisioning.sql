@@ -2,7 +2,7 @@
     SELECT
         TRIM(NVL(cvid_rec.ldap_name, NVL(subCVID.name_only || subCVID.total, subID.username))) AS loginID,
         subID.lastname, subID.firstname, subID.id, '' AS facultyStatus, '' AS staffStatus, 'A' AS studentStatus, '' AS retireStatus, profile_rec.birth_date AS dob, subID.zip AS zip,
-        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts, '' AS cellPhone, '' AS altEmail
     FROM
         adm_rec INNER JOIN    (
                                 SELECT
@@ -56,7 +56,7 @@ UNION
     SELECT
         TRIM(NVL(cvid_rec.ldap_name, NVL(subCVID.name_only || subCVID.total, subID.username))) AS loginID,
         subID.lastname, subID.firstname, subID.id, '' AS facultyStatus, '' AS staffStatus, 'A' AS studentStatus, '' AS retireStatus, profile_rec.birth_date AS dob, subID.zip AS zip,
-        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts, '' AS cellPhone, '' AS altEmail
     FROM
         adm_rec INNER JOIN    (
                                 SELECT
@@ -99,7 +99,7 @@ UNION
     SELECT
         TRIM(NVL(cvid_rec.ldap_name, NVL(subCVID.name_only || subCVID.total, subID.username))) AS loginID,
         subID.lastname, subID.firstname, subID.id, '' AS facultyStatus, '' AS staffStatus, 'A' AS studentStatus, '' AS retireStatus, profile_rec.birth_date AS dob, subID.zip AS zip,
-        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts, '' AS cellPhone, '' AS altEmail
     FROM
         stu_acad_rec    INNER JOIN  acad_cal_rec    ON  stu_acad_rec.sess   =   acad_cal_rec.sess
                                                     AND stu_acad_rec.yr     =   acad_cal_rec.yr
@@ -137,7 +137,7 @@ UNION
     SELECT
         TRIM(NVL(cvid_rec.ldap_name, NVL(subCVID.name_only || subCVID.total, subID.username))) AS loginID,
         subID.lastname, subID.firstname, subID.id, '' AS facultyStatus, '' AS staffStatus, 'A' AS studentStatus, '' AS retireStatus, profile_rec.birth_date AS dob, subID.zip AS zip,
-        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts, '' AS cellPhone, '' AS altEmail
     FROM
         prog_enr_rec    INNER JOIN    (
                                         SELECT
@@ -183,7 +183,7 @@ UNION
     SELECT
         TRIM(NVL(cvid_rec.ldap_name, NVL(subCVID.name_only || subCVID.total, subID.username))) AS loginID,
         subID.lastname, subID.firstname, subID.id, '' AS facultyStatus, '' AS staffStatus, 'A' AS studentStatus, '' AS retireStatus, profile_rec.birth_date AS dob, subID.zip AS zip,
-        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+        'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts, '' AS cellPhone, '' AS altEmail
     FROM
         regclr_rec  INNER JOIN  acad_cal_rec    ON  regclr_rec.sess         =   acad_cal_rec.sess
                                                 AND regclr_rec.yr           =   acad_cal_rec.yr
@@ -229,7 +229,7 @@ SELECT
         WHEN    TRIM(job_rec.hrstat)    IN    ('PT','PTGP')                                    THEN    'Adjunct Faculty'
         WHEN    TRIM(job_rec.hrstat)    IN    ('AD','ADPT','HR','HRPT','STD','TLE','PATH')    THEN    'Staff'
                                                                                             ELSE    ''
-    END AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+    END AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts, '' AS cellPhone, '' AS altEmail
 FROM
     job_rec INNER JOIN  (
                             SELECT
@@ -264,7 +264,7 @@ UNION
 SELECT
     TRIM(NVL(cvid_rec.ldap_name, NVL(subCVID.name_only || subCVID.total, subID.username))) AS loginID,
     subID.lastname, subID.firstname, subID.id, '' AS facultyStatus, '' AS staffStatus, 'A' AS studentStatus, '' AS retireStatus, profile_rec.birth_date AS dob, subID.zip AS zip,
-    'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts
+    'Active Student' AS acctTypes, '' AS proxID, '' AS phoneExt, '' AS depts, '' AS cellPhone, '' AS altEmail
 FROM adm_rec INNER JOIN    (
                             SELECT
                                 id, TRIM(firstname) AS firstname, TRIM(lastname) AS lastname, LOWER(REPLACE(REPLACE(firstname[1,1] || TRIM(NVL(lastname, '')), ' ', ''), '-', '')) AS username, zip
