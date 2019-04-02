@@ -248,11 +248,12 @@ LOGGING = {
     'handlers': {
         'provisioning_logfile': {
             'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
+            #'class':'logging.handlers.RotatingFileHandler',
+            'class': 'logging.FileHandler',
             'filename': PROVISIONING_LOG_FILENAME,
             'filters': ['require_debug_false'], # run logger in production
-            'maxBytes': 50000,
-            'backupCount': 10,
+            #'maxBytes': 50000,
+            #'backupCount': 10,
             'formatter': 'standard',
         },
         'info_logfile': {
