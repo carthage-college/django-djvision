@@ -91,8 +91,8 @@ def _generate_files(results, filetype, group):
     Active Directory required fields in order:
 
         loginID, lastName, firstName, nameID,
-        [facultyStatus, staffStatus, studentStatus, retireStatus,]
-        dob, zip, acct-types, proxID, phoneExt, depts
+        facultyStatus, staffStatus, studentStatus, retireStatus,
+        dob, zip, acct-types, proxID, phoneExt, depts, cellPhone, altEmail
 
     at least one of the Status fields must be populated with an 'A'
     or an 'R' for the retireStatus field
