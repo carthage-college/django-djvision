@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, sys
 # env
-sys.path.append('/data2/python_venv/2.7/djvision/lib/python2.7/')
-sys.path.append('/data2/python_venv/2.7/djvision/lib/python2.7/site-packages/')
-sys.path.append('/data2/python_venv/2.7/djvision/lib/django_projects/')
-sys.path.append('/data2/python_venv/2.7/djvision/lib/django-djvision/')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djvision.settings.shell')
 
 import django
